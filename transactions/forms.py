@@ -3,6 +3,7 @@ import datetime
 from django import forms
 from django.conf import settings
 
+from accounts.models import User
 from .models import Transaction
 
 
@@ -82,7 +83,6 @@ class TransactionDateRangeForm(forms.Form):
 
         try:
             daterange = daterange.split(' - ')
-            print(daterange)
             if len(daterange) == 2:
                 for date in daterange:
                     datetime.datetime.strptime(date, '%Y-%m-%d')
@@ -93,6 +93,43 @@ class TransactionDateRangeForm(forms.Form):
             raise forms.ValidationError("Invalid date range")
 
 
-class TransferMoneyForm(forms.Form):
+class TransferMoneyForm(TransactionForm):
     recipient_username = forms.CharField(label='Recipient Username')
-    amount = forms.DecimalField(label='Amount', min_value=1)
+
+    def clean_amount(self):
+        account = self.account
+        min_withdraw_amount = settings.MINIMUM_WITHDRAWAL_AMOUNT
+        max_withdraw_amount = (
+            account.account_type.maximum_withdrawal_amount
+        )
+        balance = account.balance
+
+        amount = self.cleaned_data.get('amount')
+
+        if amount < min_withdraw_amount:
+            raise forms.ValidationError(
+                f'You can withdraw at least {min_withdraw_amount} $'
+            )
+
+        if amount > max_withdraw_amount:
+            raise forms.ValidationError(
+                f'You can withdraw at most {max_withdraw_amount} $'
+            )
+
+        if amount > balance:
+            raise forms.ValidationError(
+                f'You have {balance} $ in your account. '
+                'You can not withdraw more than your account balance'
+            )
+
+        return amount
+
+    def clean_user(self):
+        account = self.account
+        user = User.objects.get(account=account)
+        if not user:
+            raise forms.ValidationError(
+                f'Invalid user'
+            )
+
+        return account

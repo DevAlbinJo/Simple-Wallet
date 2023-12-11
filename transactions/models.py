@@ -24,6 +24,8 @@ class Transaction(models.Model):
 
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    objects = models.Manager()
+
     def __str__(self):
         return str(self.account.account_no)
 
