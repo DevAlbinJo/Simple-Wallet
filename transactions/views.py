@@ -139,7 +139,7 @@ class WithdrawMoneyView(TransactionCreateMixin):
 
 class TransferMoneyView(FormView):
     form_class = TransferMoneyForm
-    template_name = 'transactions/transfer_money.html' 
+    template_name = 'transactions/transfer_money.html'
     success_url = reverse_lazy('transactions:transaction_report')
 
     def form_valid(self, form):
@@ -170,5 +170,12 @@ class TransferMoneyView(FormView):
 
         sender_account.save()
         recipient_account.save()
+
+        transaction = Transaction.objects.create(
+            account=recipient_account,
+            amount=amount,
+            balance_after_transaction=sender_account.balance,
+            transaction_type=WITHDRAWAL,
+        )
         messages.success(self.request, f'${amount} successfully transferred to {recipient_username}.')
         return super().form_valid(form)

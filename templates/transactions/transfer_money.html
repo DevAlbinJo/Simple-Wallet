@@ -1,20 +1,33 @@
 {% extends 'core/base.html' %} {% block head_title %}{{ title }}{% endblock %} {% block content %}
 <div>
-    <h1>Transfer Money</h1>
-
     {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
     {% endif %}
+    <div class="w-full flex mt-5 justify-center">
+        <div class="bg-white w-5/12 rounded-xl shadow-md">
+            <h1 class="font-mono font-bold text-3xl text-center pb-5 pt-10 px-5">Transfer Money</h1>
+            <div class="mb-4">
 
-    <form method="post" action="{% url 'transactions:transfer_money' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Transfer Money</button>
-    </form>
+                <form method="post" action="{% url 'transactions:transfer_money' %}" class="px-8 pt-6 pb-8 mb-4">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="amount">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                        </label>
+                    </div>
+                    <div class="flex w-full justify-center">
+                        <button class="bg-blue-900 text-white hover:text-blue-900 hover:bg-white border border-blue-900 font-bold px-4 py-2"
+                                type="submit">Transfer Money
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 </div>
 {% endblock %}
