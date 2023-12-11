@@ -1,3 +1,23 @@
+Welcome to SimpleWallet! This application provides a robust set of features for managing bank accounts, transactions, and interest calculations. 
+
+# Total Work Hours: 12
+
+
+## Technical Details
+
+- **Poetry:** The project is managed using Poetry for streamlined dependency management and project configuration.
+
+- **Dockerized Container:** The application is containerized using Docker, making it easy to deploy and run consistently across different environments.
+
+- **Celery Integration:** Celery is integrated into the system to handle scheduled tasks, contributing to the automation of background processes.
+
+## Note
+
+Please be aware that due to time constraints, the user interface (UI) and unit testing have not received extensive attention. The focus has been on delivering core functionality within the specified timeframe. Your understanding and feedback are highly appreciated as we work towards further enhancing and refining this Bank Management System.
+
+Thank you for your time and consideration. If you have any questions or feedback, feel free to reach out!
+
+
 ## Features
 
 * Create Bank Account.
